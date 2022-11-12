@@ -7,6 +7,13 @@ export UNITY='/Applications/Unity/Hub/Editor/2021.3.8f1/Unity.app/Contents/MacOS
 alias unity='eval $UNITY'
 export UNITY_BUILD_PATH='/Users/butchuc/Builds/TheBuild.app'
 
+# I could never quite get this to work.  I opted to use environment variables
+# instead, but kept it around for reference.
+function iterm_var(){
+    echo "Setting $1 = $2"
+    printf "\033]1337;SetUserVar=%s=%s\007" $1 `echo -n $2 | base64`
+}
+
 
 function unity_here(){
      unity -projectPath $PWD
@@ -37,6 +44,11 @@ function unity_clear_package_cache(){
     fnd PackageCache | xargs rm -r 
 }
 
+# Note, when using open you cannot tell unity to log to the console since open
+# spawns the process and doesn't remain connected.  So this will kick off a tail.
+# open is used so that we don't have to know the path to the executable in the 
+# .app folder.  I'm sure there is a way to figure that out dynamically bubt this
+# works fine.
 function unity_run_build(){ 
     if [ $2 ]; then
         eval "open $1 -n --args --logfile $2; tail -f $2"
@@ -45,12 +57,7 @@ function unity_run_build(){
     fi
 }
 
-function iterm_var(){
-    echo "Setting $1 = $2"
-    printf "\033]1337;SetUserVar=%s=%s\007" $1 `echo -n $2 | base64`
-}
-
 
 function unity_run_x_builds(){
-    python3 $ZSHFILES/iterm2_experiments.py "cd ~/Builds;unity_run_build TheBuild.app log_pane_<x>.txt" $1
+    python3 $ZSHFILES/iterm2_run_in_panes.py "cd ~/Builds;unity_run_build TheBuild.app log_pane_<x>.txt" $1
 }
