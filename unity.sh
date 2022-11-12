@@ -43,5 +43,14 @@ function unity_run_build(){
     else
         eval "open $1 -n"
     fi
-    
+}
+
+function iterm_var(){
+    echo "Setting $1 = $2"
+    printf "\033]1337;SetUserVar=%s=%s\007" $1 `echo -n $2 | base64`
+}
+
+
+function unity_run_x_builds(){
+    python3 $ZSHFILES/iterm2_experiments.py "cd ~/Builds;unity_run_build TheBuild.app log_pane_<x>.txt" $1
 }
