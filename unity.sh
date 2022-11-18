@@ -95,3 +95,15 @@ function unity_symlink_package_cache(){
         fi
     fi
 }
+
+# Clones a url to GIT_TEMP_DIRECTORY as the username in the url
+# This then creates a symlink for Library/PackageCache inside
+# the cloned directory.
+function clone_and_symlink_unity_repo() {
+    # this creates and populates $repo.  it will either be $1
+    # or the user will be prompted for it.
+    clone_repo_to_temp_as_username $1
+    local username=$(echo $repo | cut -d/ -f4 )
+    local cloned_to=$GIT_TEMP_DIRECTORY/$username
+    unity_symlink_package_cache $cloned_to
+}
