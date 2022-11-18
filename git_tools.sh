@@ -4,6 +4,8 @@ git config --global pager.branch false
 alias gitcod='git checkout .'
 alias gpo='git push origin HEAD'
 alias gitkey='eval "$(ssh-agent -s)";ssh-add ~/.ssh/git_rsa'
+
+export GIT_TEMP_DIRECTORY='/Users/butchuc/temp_github'
 #----------------------
 #git
 #----------------------
@@ -27,10 +29,6 @@ func branch_file(){
   eval "git show ${branch_name}:${file_name} > ${file_name}"
 }
 
-function _gh_wiki_url(){
-  # https://github.build.ge.com/PaaSport/pa-searchldr/wiki
-  # https://github.build.ge.com//PaaSport/pa-searchldr.wiki/tree/master
-}
 
 # Opens the github page for the current git repository in your browser
 # git@github.com:jasonneylon/dotfiles.git
@@ -103,6 +101,19 @@ function master_diff(){
   fi
 
 }
+
+function clone_repo_to_temp_as_username(){
+  echo $1
+  local username=$(echo $1 | cut -d/ -f4 )
+  local reponame=$(echo $1 | cut -d/ -f5 | cut -d. -f1)
+
+  echo "Cloning $1 to $GIT_TEMP_DIRECTORY/$username"
+  echo $username
+
+  mkdir -p $GIT_TEMP_DIRECTORY
+  git clone $1 $GIT_TEMP_DIRECTORY/$username
+}
+
 
 GIT_EXTERNAL_DIFF=$ZSHFILES/bin/git_external_diff
 export GIT_EXTERNAL_DIFF
