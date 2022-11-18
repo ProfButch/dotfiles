@@ -6,6 +6,7 @@
 export UNITY='/Applications/Unity/Hub/Editor/2021.3.8f1/Unity.app/Contents/MacOS/Unity'
 alias unity='eval $UNITY'
 export UNITY_BUILD_PATH='/Users/butchuc/Builds/TheBuild.app'
+export UNITY_PACKAGE_CACHE='/Users/butchuc/unity/common_library/PackageCache'
 
 # I could never quite get this to work.  I opted to use environment variables
 # instead, but kept it around for reference.
@@ -60,4 +61,37 @@ function unity_run_build(){
 
 function unity_run_x_builds(){
     python3 $ZSHFILES/iterm2_run_in_panes.py "cd ~/Builds;unity_run_build TheBuild.app log_pane_<x>.txt" $1
+}
+
+
+# To be called from, or passed, the base of a Unity project.  This will check 
+# for ./Library and ./Library/PackageCache.  If PackageCache does not exist 
+# then it will be created as a symlink.
+function unity_symlink_package_cache(){
+    local proj_path=$PWD
+    if [ $1 ]; then
+       proj_path=$1
+    fi
+
+    local library_path="$proj_path/Library"
+    local cache_path="$proj_path/Library/PackageCache"
+
+    if [ ! -d $library_path ]; then
+        echo "creating $library_path"
+        `mkdir $library_path`
+    else
+        echo "$library_path already exists"
+    fi
+
+    if [ ! -d $cache_path ]; then
+        echo "symlinking $cache_path -> $UNITY_PACKAGE_CACHE"
+        ln -s $UNITY_PACKAGE_CACHE $cache_path
+    else
+        echo "$cache_path already exists"
+        if test -L $cache_path; then
+            echo "  - is a symlink"
+        else
+            echo "  - is NOT a symlink"
+        fi
+    fi
 }
