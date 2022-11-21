@@ -119,7 +119,7 @@ function clone_repo_to_temp_as_username(){
   echo $username
 
   mkdir -p $GIT_TEMP_DIRECTORY
-  git clone $repo $clone_to
+    git clone $repo $clone_to
 }
 
 
