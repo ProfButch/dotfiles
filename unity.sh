@@ -5,7 +5,7 @@
 # NetcodeForGameObjects.app/Contents/MacOS/NetcodeForGameObjects -mlapi client -logfile -
 export UNITY='/Applications/Unity/Hub/Editor/2021.3.8f1/Unity.app/Contents/MacOS/Unity'
 alias unity='eval $UNITY'
-export UNITY_BUILD_PATH='/Users/butchuc/Builds/TheBuild.app'
+export UNITY_BUILD_PATH='/Users/butchuc/temp/unity_builds/TheBuild.app'
 export UNITY_PACKAGE_CACHE='/Users/butchuc/unity/common_library/PackageCache'
 
 # I could never quite get this to work.  I opted to use environment variables
@@ -48,7 +48,7 @@ function unity_clear_package_cache(){
 # Note, when using open you cannot tell unity to log to the console since open
 # spawns the process and doesn't remain connected.  So this will kick off a tail.
 # open is used so that we don't have to know the path to the executable in the 
-# .app folder.  I'm sure there is a way to figure that out dynamically bubt this
+# .app folder.  I'm sure there is a way to figure that out dynamically but this
 # works fine.
 function unity_run_build(){ 
     if [ $2 ]; then

@@ -5,7 +5,7 @@ alias gitcod='git checkout .'
 alias gpo='git push origin HEAD'
 alias gitkey='eval "$(ssh-agent -s)";ssh-add ~/.ssh/git_rsa'
 
-export GIT_TEMP_DIRECTORY='/Users/butchuc/temp_github'
+export GIT_TEMP_DIRECTORY='/Users/butchuc/temp/temp_github'
 #----------------------
 #git
 #----------------------
