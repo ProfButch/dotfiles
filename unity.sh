@@ -60,7 +60,7 @@ function unity_run_build(){
 
 
 function unity_run_x_builds(){
-    python3 $ZSHFILES/iterm2_run_in_panes.py "cd ~/Builds;unity_run_build TheBuild.app log_pane_<x>.txt" $1
+    python3 $ZSHFILES/iterm2_run_in_panes.py "cd ~/temp/unity_builds/;unity_run_build TheBuild.app log_pane_<x>.txt" $1
 }
 
 
