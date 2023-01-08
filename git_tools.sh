@@ -109,3 +109,23 @@ export GIT_EXTERNAL_DIFF
 
 alias hide_git='git config --global oh-my-zsh.hide-status 1'
 alias show_git='git config --global oh-my-zsh.hide-status 0'
+
+function clone_repo_to_temp_as_username(){
+  local repo=$1
+  if [ ! $1 ];then
+    echo "Enter URL"
+    read repo
+  fi
+
+  local username=$(echo $repo | cut -d/ -f4 )
+  local reponame=$(echo $repo | cut -d/ -f5 | cut -d. -f1)
+  # $clone_to must not be local.  It is used outside of this method.
+  # See clone_and_symlink_unity_repo
+  clone_to=$GIT_TEMP_DIRECTORY/$username
+
+  echo "Cloning $repo to $clone_to"
+  echo $username
+
+  mkdir -p $GIT_TEMP_DIRECTORY
+    git clone $repo $clone_to
+}
