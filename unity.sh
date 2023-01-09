@@ -3,10 +3,10 @@
 
 # Run a build with client mode
 # NetcodeForGameObjects.app/Contents/MacOS/NetcodeForGameObjects -mlapi client -logfile -
-export UNITY='/Applications/Unity/Hub/Editor/2021.3.8f1/Unity.app/Contents/MacOS/Unity'
+export UNITY='/Applications/Unity/Hub/Editor/2021.3.16f1/Unity.app/Contents/MacOS/Unity'
 alias unity='eval $UNITY'
-export UNITY_BUILD_PATH='/Users/butchuc/temp/unity_builds/TheBuild.app'
-export UNITY_PACKAGE_CACHE='/Users/butchuc/unity/common_library/PackageCache'
+export UNITY_BUILD_PATH=~/temp/unity_builds/TheBuild.app
+# export UNITY_PACKAGE_CACHE='/Users/butchuc/unity/common_library/PackageCache'
 
 # I could never quite get this to work.  I opted to use environment variables
 # instead, but kept it around for reference.
@@ -42,15 +42,15 @@ function unity_build_run_edit(){
 
 function unity_clear_package_cache(){
     fnd PackageCache | xargs ls
-    fnd PackageCache | xargs rm -r 
+    fnd PackageCache | xargs rm -r
 }
 
 # Note, when using open you cannot tell unity to log to the console since open
 # spawns the process and doesn't remain connected.  So this will kick off a tail.
-# open is used so that we don't have to know the path to the executable in the 
+# open is used so that we don't have to know the path to the executable in the
 # .app folder.  I'm sure there is a way to figure that out dynamically but this
 # works fine.
-function unity_run_build(){ 
+function unity_run_build(){
     if [ $2 ]; then
         eval "open $1 -n --args --logfile $2; tail -f $2"
     else
@@ -64,8 +64,8 @@ function unity_run_x_builds(){
 }
 
 
-# To be called from, or passed, the base of a Unity project.  This will check 
-# for ./Library and ./Library/PackageCache.  If PackageCache does not exist 
+# To be called from, or passed, the base of a Unity project.  This will check
+# for ./Library and ./Library/PackageCache.  If PackageCache does not exist
 # then it will be created as a symlink.
 function unity_symlink_package_cache(){
     local proj_path=$PWD

@@ -1,9 +1,15 @@
 #!/bin/bash
 git config --global pager.branch false
 
+GIT_EXTERNAL_DIFF=$ZSHFILES/bin/git_external_diff
+export GIT_EXTERNAL_DIFF
+
 alias gitcod='git checkout .'
 alias gpo='git push origin HEAD'
 alias gitkey='eval "$(ssh-agent -s)";ssh-add ~/.ssh/git_rsa'
+alias hide_git='git config --global oh-my-zsh.hide-status 1'
+alias show_git='git config --global oh-my-zsh.hide-status 0'
+
 #----------------------
 #git
 #----------------------
@@ -28,8 +34,6 @@ func branch_file(){
 }
 
 function _gh_wiki_url(){
-  # https://github.build.ge.com/PaaSport/pa-searchldr/wiki
-  # https://github.build.ge.com//PaaSport/pa-searchldr.wiki/tree/master
 }
 
 # Opens the github page for the current git repository in your browser
@@ -104,11 +108,6 @@ function master_diff(){
 
 }
 
-GIT_EXTERNAL_DIFF=$ZSHFILES/bin/git_external_diff
-export GIT_EXTERNAL_DIFF
-
-alias hide_git='git config --global oh-my-zsh.hide-status 1'
-alias show_git='git config --global oh-my-zsh.hide-status 0'
 
 function clone_repo_to_temp_as_username(){
   local repo=$1
