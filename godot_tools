@@ -10,7 +10,7 @@ alias godot_here='godot -e --path $PWD' # hijacks the prompt with godot output.
 alias gdscript='godot --path $PWD -s '
 alias godot_loc="find . -name '*.gd' | xargs wc -l"
 
-alias adb='/Users/butchwesley/Library/Android/sdk/platform-tools/adb'
+# alias adb='/Users/butchwesley/Library/Android/sdk/platform-tools/adb'
 func connect_pixel(){
   adb devices
   #adb tcpip 5555 (adb -s FA7B41A00312 tcpip 5555)
