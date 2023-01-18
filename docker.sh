@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-alias dkrls='docker container ls'
-alias dkrsh='docker exec -it $CONTAINER /bin/sh'
-
-dkr_use(){
-    export CONTAINER="$1"
-=======
 # ------------------------------------------------------------------------------
 # Convenience wrappers around docker.rb
 # ------------------------------------------------------------------------------
@@ -19,5 +12,4 @@ dkrsh(){
 dkruse(){
     local cmd="ruby $ZSHFILES/docker.rb use $1"
     eval ${cmd}
->>>>>>> master
 }
