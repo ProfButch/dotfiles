@@ -52,7 +52,7 @@ function unity_clear_package_cache(){
 # works fine.
 function unity_run_build(){
     if [ $2 ]; then
-        eval "open $1 -n --args --logfile $2; tail -f $2"
+        eval "touch $2; open $1 -n --args --logfile $2; tail -f $2"
     else
         eval "open $1 -n"
     fi
