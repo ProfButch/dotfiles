@@ -3,10 +3,28 @@
 
 # Run a build with client mode
 # NetcodeForGameObjects.app/Contents/MacOS/NetcodeForGameObjects -mlapi client -logfile -
-export UNITY='/Applications/Unity/Hub/Editor/2021.3.16f1/Unity.app/Contents/MacOS/Unity'
+
+export UNITY='CALL switch_unity_version_to_set'
 alias unity='eval $UNITY'
+alias unity_list_installs='ll /Applications/Unity/Hub/Editor/'
 export UNITY_BUILD_PATH=~/temp/unity_builds/TheBuild.app
 # export UNITY_PACKAGE_CACHE='/Users/butchuc/unity/common_library/PackageCache'
+
+
+function switch_unity_version(){
+    app=$1
+    export UNITY="/Applications/Unity/Hub/Editor/${app}/Unity.app/Contents/MacOS/Unity"
+    # pass in anything as 2nd paramter to make it not print
+    # out the unity info.  this is so we don't get output
+    # when loading up the profile.
+    if [ ! $2 ];then
+        echo $UNITY
+        unity --version
+    fi
+}
+
+
+alias unity_print_project_version="cat ProjectSettings/ProjectVersion.txt | grep 'm_EditorVersion'"
 
 # I could never quite get this to work.  I opted to use environment variables
 # instead, but kept it around for reference.
@@ -19,6 +37,7 @@ function iterm_var(){
 function unity_here(){
      unity -projectPath $PWD
 }
+
 
 function unity_build(){
     echo "Building to $UNITY_BUILD_PATH"

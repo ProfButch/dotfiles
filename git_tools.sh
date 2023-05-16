@@ -7,8 +7,9 @@ export GIT_EXTERNAL_DIFF
 alias gitcod='git checkout .'
 alias gpo='git push origin HEAD'
 alias gitkey='eval "$(ssh-agent -s)";ssh-add ~/.ssh/git_rsa'
-alias hide_git='git config --global oh-my-zsh.hide-status 1'
-alias show_git='git config --global oh-my-zsh.hide-status 0'
+alias hide_git='git config oh-my-zsh.hide-info 1'
+alias show_git='git config oh-my-zsh.hide-info 0'
+alias git_temp_here='export GIT_TEMP_DIRECTORY=`pwd`;echo $GIT_TEMP_DIRECTORY'
 
 #----------------------
 #git
