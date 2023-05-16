@@ -5,9 +5,11 @@
 # NetcodeForGameObjects.app/Contents/MacOS/NetcodeForGameObjects -mlapi client -logfile -
 
 export UNITY='CALL switch_unity_version_to_set'
-alias unity='eval $UNITY'
-alias unity_list_installs='ll /Applications/Unity/Hub/Editor/'
 export UNITY_BUILD_PATH=~/temp/unity_builds/TheBuild.app
+
+alias unity='eval $UNITY'
+alias unity_list_installs='ls -1 /Applications/Unity/Hub/Editor/'
+alias unity_print_project_version="cat ProjectSettings/ProjectVersion.txt | grep 'm_EditorVersion:'"
 # export UNITY_PACKAGE_CACHE='/Users/butchuc/unity/common_library/PackageCache'
 
 
@@ -23,8 +25,19 @@ function switch_unity_version(){
     fi
 }
 
+function switch_unity_to_project_version(){
+    version=`unity_print_project_version | sed "s/m_EditorVersion://" | xargs`
+    echo "Project version = $version"
+    installed=`unity_list_installs`
+    if [[ "$installed" == *"$version"* ]]; then
+        echo "Switching"
+        switch_unity_version $version
+    else
+        echo "$version is not installed.  Installed versions:"
+        echo $installed
+    fi
+}
 
-alias unity_print_project_version="cat ProjectSettings/ProjectVersion.txt | grep 'm_EditorVersion'"
 
 # I could never quite get this to work.  I opted to use environment variables
 # instead, but kept it around for reference.
