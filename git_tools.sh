@@ -135,10 +135,3 @@ function clone_repo_to_temp_as_username(){
 
 GIT_EXTERNAL_DIFF=$ZSHFILES/bin/git_external_diff
 export GIT_EXTERNAL_DIFF
-
-  echo "Cloning $repo to $clone_to"
-  echo $username
-
-  mkdir -p $GIT_TEMP_DIRECTORY
-    git clone $repo $clone_to
-}
