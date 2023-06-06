@@ -2,6 +2,8 @@
 dot_it() {
   if [ -f "$ZSHFILES/$1" ] ; then
     eval ". $ZSHFILES/$1"
+  else
+    echo "missing file $ZSHFILES/$1"
   fi
 }
 
@@ -12,4 +14,3 @@ dot_it git_tools.sh
 dot_it mac.zsh
 
 dot_it post_local
-dot_it ../private_dot_files/sources
