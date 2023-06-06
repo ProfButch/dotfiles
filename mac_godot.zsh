@@ -4,6 +4,8 @@
 #   up when you launch gut.
 # ------------------------------------------------------------------------------
 export GODOT='/Applications/Godot.app/Contents/MacOS/Godot'
+export GODOT_USER_DIR=~/Library/Application\ Support/Godot/app_userdata
+export GODOT_EDITOR_DIR=~/Library/ApplicatioN\ Support/Godot/
 
 
 alias ngodot='open -n $GODOT'

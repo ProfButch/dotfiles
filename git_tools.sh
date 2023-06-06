@@ -1,11 +1,17 @@
 #!/bin/bash
 git config --global pager.branch false
 
+GIT_EXTERNAL_DIFF=$ZSHFILES/bin/git_external_diff
+export GIT_EXTERNAL_DIFF
+
 alias gitcod='git checkout .'
 alias gpo='git push origin HEAD'
 alias gitkey='eval "$(ssh-agent -s)";ssh-add ~/.ssh/git_rsa'
 
-export GIT_TEMP_DIRECTORY='/Users/butchuc/temp/temp_github'
+alias hide_git='git config oh-my-zsh.hide-info 1'
+alias show_git='git config oh-my-zsh.hide-info 0'
+alias git_temp_here='export GIT_TEMP_DIRECTORY=`pwd`;echo $GIT_TEMP_DIRECTORY'
+
 #----------------------
 #git
 #----------------------
@@ -29,6 +35,10 @@ func branch_file(){
   eval "git show ${branch_name}:${file_name} > ${file_name}"
 }
 
+function _gh_wiki_url(){
+  # https://github.build.ge.com/PaaSport/pa-searchldr/wiki
+  # https://github.build.ge.com//PaaSport/pa-searchldr.wiki/tree/master
+}
 
 # Opens the github page for the current git repository in your browser
 # git@github.com:jasonneylon/dotfiles.git
@@ -111,7 +121,7 @@ function clone_repo_to_temp_as_username(){
 
   local username=$(echo $repo | cut -d/ -f4 )
   local reponame=$(echo $repo | cut -d/ -f5 | cut -d. -f1)
-  # $clone_to must not be local.  It is used outside of this method.  
+  # $clone_to must not be local.  It is used outside of this method.
   # See clone_and_symlink_unity_repo
   clone_to=$GIT_TEMP_DIRECTORY/$username
 
@@ -126,5 +136,9 @@ function clone_repo_to_temp_as_username(){
 GIT_EXTERNAL_DIFF=$ZSHFILES/bin/git_external_diff
 export GIT_EXTERNAL_DIFF
 
-alias hide_git='git config --global oh-my-zsh.hide-status 1'
-alias show_git='git config --global oh-my-zsh.hide-status 0'
+  echo "Cloning $repo to $clone_to"
+  echo $username
+
+  mkdir -p $GIT_TEMP_DIRECTORY
+    git clone $repo $clone_to
+}
