@@ -51,6 +51,11 @@ function unity_here(){
      unity -projectPath $PWD
 }
 
+function unity_here_project_version(){
+    switch_unity_to_project_version
+    unity_here
+}
+
 
 function unity_build(){
     echo "Building to $UNITY_BUILD_PATH"

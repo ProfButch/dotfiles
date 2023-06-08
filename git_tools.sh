@@ -112,6 +112,25 @@ function master_diff(){
 
 }
 
+
+func clone_repo_as_username(){
+    local repo=$1
+    local dest=$2
+
+    local username=$(echo $repo | cut -d/ -f4 )
+    # local reponame=$(echo $repo | cut -d/ -f5 | cut -d. -f1)
+    # $clone_to must not be local.  It is used outside of this method.
+    # See clone_and_symlink_unity_repo
+    clone_to=$dest/$username
+
+    echo "Cloning $repo to $dest"
+    echo $username
+
+    mkdir -p $dest
+    git clone $repo $clone_to
+}
+
+
 function clone_repo_to_temp_as_username(){
   local repo=$1
   if [ ! $1 ];then
@@ -119,17 +138,7 @@ function clone_repo_to_temp_as_username(){
     read repo
   fi
 
-  local username=$(echo $repo | cut -d/ -f4 )
-  local reponame=$(echo $repo | cut -d/ -f5 | cut -d. -f1)
-  # $clone_to must not be local.  It is used outside of this method.
-  # See clone_and_symlink_unity_repo
-  clone_to=$GIT_TEMP_DIRECTORY/$username
-
-  echo "Cloning $repo to $clone_to"
-  echo $username
-
-  mkdir -p $GIT_TEMP_DIRECTORY
-    git clone $repo $clone_to
+  clone_repo_as_username $repo $GIT_TEMP_DIRECTORY
 }
 
 
