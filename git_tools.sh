@@ -35,10 +35,6 @@ func branch_file(){
   eval "git show ${branch_name}:${file_name} > ${file_name}"
 }
 
-function _gh_wiki_url(){
-  # https://github.build.ge.com/PaaSport/pa-searchldr/wiki
-  # https://github.build.ge.com//PaaSport/pa-searchldr.wiki/tree/master
-}
 
 # Opens the github page for the current git repository in your browser
 # git@github.com:jasonneylon/dotfiles.git

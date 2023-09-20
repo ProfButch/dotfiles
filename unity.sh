@@ -1,10 +1,4 @@
-# Run a build with server mode
-# NetcodeForGameObjects.app/Contents/MacOS/NetcodeForGameObjects -mlapi server -logfile -
-
-# Run a build with client mode
-# NetcodeForGameObjects.app/Contents/MacOS/NetcodeForGameObjects -mlapi client -logfile -
-
-export UNITY='CALL switch_unity_version_to_set'
+export UNITY='NOT SET YET, call switch_unity_version or switch_unity_to_project_version'
 export UNITY_BUILD_PATH=~/temp/unity_builds/TheBuild.app
 
 alias unity='eval $UNITY'
@@ -88,16 +82,17 @@ function unity_clear_package_cache(){
 # .app folder.  I'm sure there is a way to figure that out dynamically but this
 # works fine.
 function unity_run_build(){
+    local screen_options="-screen-height 600 -screen-width 800 -screen-fullscreen 0";
     if [ $2 ]; then
-        eval "touch $2; open $1 -n --args --logfile $2; tail -f $2"
+        eval "touch $2; open $1 -n --args --logfile $2 $screen_options; tail -f $2"
     else
-        eval "open $1 -n"
+        eval "open $1 -n --args $screen_options"
     fi
 }
 
 
 function unity_run_x_builds(){
-    python3 $ZSHFILES/iterm2_run_in_panes.py "cd ~/temp/unity_builds/;unity_run_build TheBuild.app log_pane_<x>.txt" $1
+    python3 $ZSHFILES/iterm2_run_in_panes.py "cd ~/temp/unity_builds/;unity_run_build $UNITY_BUILD_PATH log_pane_<x>.txt" $1
 }
 
 
