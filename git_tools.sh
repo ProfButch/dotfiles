@@ -140,3 +140,61 @@ function clone_repo_to_temp_as_username(){
 
 GIT_EXTERNAL_DIFF=$ZSHFILES/bin/git_external_diff
 export GIT_EXTERNAL_DIFF
+
+
+
+# https://stackoverflow.com/questions/6990484/how-to-checkout-in-git-by-date
+function checkout_before_date(){
+    #git checkout `git rev-list -n 1 --first-parent --before="2009-07-27 13:37" master`
+    local date=$1
+    local branch='change this'
+    if [ $2 ];then
+      branch=$2
+    else
+      branch=$(default_branch)
+    fi
+
+    local cmd="git -c advice.detachedHead=false checkout \`git rev-list -n 1 --first-parent --before=\"$date\" $branch\`"
+    # echo $cmd
+    eval $cmd
+}
+
+
+function default_branch(){
+  git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'
+}
+
+
+function checkout_all_before_date(){
+  run_on_all_git_dirs "checkout_before_date $1 $2"
+}
+
+
+function checkout_all_default_branch(){
+  run_on_all_git_dirs 'git checkout $(default_branch)'
+}
+
+
+
+function run_on_all_git_dirs(){
+  local did_change=false
+  for dir in $PWD/*;
+  do
+    if [ -d "$dir" ]; then
+      cd $dir
+      did_change=true
+
+      # make sure current directory is a git directory
+      if git rev-parse --git-dir > /dev/null 2>&1; then
+        echo "* $dir"
+        eval $1
+      fi
+    fi
+  done
+
+  if [ "$did_change" = true ]; then
+    cd ..
+  else
+    echo "No directories found"
+  fi
+}
