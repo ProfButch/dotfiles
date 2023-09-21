@@ -1,8 +1,7 @@
 #!/bin/bash
 git config --global pager.branch false
 
-GIT_EXTERNAL_DIFF=$ZSHFILES/bin/git_external_diff
-export GIT_EXTERNAL_DIFF
+export GIT_EXTERNAL_DIFF=$ZSHFILES/bin/git_external_diff
 
 alias gitcod='git checkout .'
 alias gpo='git push origin HEAD'
@@ -111,7 +110,10 @@ function master_diff(){
 
 func clone_repo_as_username(){
     local repo=$1
-    local dest=$2
+    local dest=$PWD
+    if [ $2 ]; then
+      dest=$2
+    fi
 
     local username=$(echo $repo | cut -d/ -f4 )
     # local reponame=$(echo $repo | cut -d/ -f5 | cut -d. -f1)
@@ -138,66 +140,6 @@ function clone_repo_to_temp_as_username(){
 }
 
 
-GIT_EXTERNAL_DIFF=$ZSHFILES/bin/git_external_diff
-export GIT_EXTERNAL_DIFF
-
-# commit_before_date '2023-9-18 21:59:00'
-# Seems to have odd behavior if you do not specify h:m.  It was finding a commit
-# at around 7:00 am when there was a commit at 6:00 and 22:58 if the time was
-# left off.  So either use 21:59:00 or 0:01:00 of the NEXT day.
-#
-# Check results with something like:
-#     git rev-list -n 10 --date-order --pretty='  %ci %h' main
-function commit_before_date(){
-    local date=$1
-
-    local branch='change this'
-    if [ $2 ];then
-      branch=$2
-    else
-      branch=$(git_default_branch)
-    fi
-
-  git rev-list -n 1 --first-parent --before=\"$date\" $branch\
-}
-
-# https://stackoverflow.com/questions/6990484/how-to-checkout-in-git-by-date
-function checkout_before_date(){
-    #git checkout `git rev-list -n 1 --first-parent --before="2009-07-27 13:37" master`
-    local cmd="git -c advice.detachedHead=false checkout $(commit_before_date $1 $2)"
-    # echo $cmd
-    eval $cmd
-
-    git_display_current_in_history
-}
-
-function git_display_current_in_history(){
-    local default_hash=`git rev-parse $(git_default_branch)`
-    local cur_hash=`git rev-parse HEAD`
-    if [ "$default_hash" = "$cur_hash" ]; then
-      echo "Same as $(git_default_branch)"
-    else
-      git_show_current_in_list_of_commits
-    fi;
-}
-
-
-function git_default_branch(){
-  git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'
-}
-
-
-function checkout_all_before_date(){
-  run_on_all_git_dirs "checkout_before_date '$1' '$2'"
-}
-
-
-function checkout_all_default_branch(){
-  run_on_all_git_dirs 'git checkout $(git_default_branch)'
-}
-
-
-
 function run_on_all_git_dirs(){
   local did_change=false
   for dir in $PWD/*;
@@ -222,13 +164,64 @@ function run_on_all_git_dirs(){
 }
 
 
+function git_default_branch(){
+  git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'
+}
+
+
+# commit_before_date '2023-9-18 21:59:00'
+# Seems to have odd behavior if you do not specify h:m.  It was finding a commit
+# at around 7:00 am when there was a commit at 6:00 and 22:58 if the time was
+# left off.  So either use 21:59:00 or 0:01:00 of the NEXT day.
+#
+# Check results with something like:
+#     git rev-list -n 10 --date-order --pretty='  %ci %h' main
+function commit_before_date(){
+    local date=$1
+
+    local branch='change this'
+    if [ $2 ];then
+      branch=$2
+    else
+      branch=$(git_default_branch)
+    fi
+
+  git rev-list -n 1 --first-parent --before=\"$date\" $branch\
+}
+
+
+# https://stackoverflow.com/questions/6990484/how-to-checkout-in-git-by-date
+function checkout_before_date(){
+    #git checkout `git rev-list -n 1 --first-parent --before="2009-07-27 13:37" master`
+    local cmd="git -c advice.detachedHead=false checkout $(commit_before_date $1 $2)"
+    # echo $cmd
+    eval $cmd
+
+    git_show_hash_in_history
+}
+
+
+function checkout_all_before_date(){
+  run_on_all_git_dirs "checkout_before_date '$1' '$2'"
+}
+
+
+function checkout_all_default_branch(){
+  run_on_all_git_dirs 'git checkout $(git_default_branch)'
+}
+
+
 function git_list_commits_by_date(){
   git rev-list --date-order --pretty='  %ci    %h' $(git_default_branch)
 }
 
 
-function git_show_current_in_list_of_commits(){
-  local cur_hash=`git rev-parse HEAD`
-
-  git_list_commits_by_date | grep -n -B 4 -A 5 "$cur_hash"
+function git_show_hash_in_history(){
+    local default_hash=`git rev-parse $(git_default_branch)`
+    local cur_hash=`git rev-parse HEAD`
+    if [ "$default_hash" = "$cur_hash" ]; then
+      echo "Same as $(git_default_branch)"
+    else
+      git_list_commits_by_date | grep -n --color -E -B 4 -A 5 "$cur_hash"
+    fi;
 }
